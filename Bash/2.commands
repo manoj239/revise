@@ -1,0 +1,10 @@
+uname -a            #type of os 
+cat /etc/lsb-release   #To get os type and release date too
+
+aws ec2 describe-vpcs --region us-east-1 | jq ".Vpcs[].VpcId" -r |wc -l
+  a)vpc_count=$(aws ec2 describe-vpcs --region us-east-1 | jq ".Vpcs[].VpcId" -r |wc -l)
+  b)echo $vpc_count
+  c)echo ${vpc_count}
+  d)echo "${vpc_count}"
+
+  

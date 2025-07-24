@@ -1,0 +1,7 @@
+git init
+git status
+git add .;git commit -m "Basicscript"
+git remote add origin " "
+git push origin master
+-------------------------------------------------------------
+git branch -m master dev #To rename the master branch to dev
