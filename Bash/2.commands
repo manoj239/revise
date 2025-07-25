@@ -1,4 +1,8 @@
 uname -a            #type of os 
+curl ipconfig.io
+uptime
+last reboot
+To modify nginx page design change in this file  -  /var/www/html/index.nginx-debian.html 
 cat /etc/lsb-release   #To get os type and release date too
 
 aws ec2 describe-vpcs --region us-east-1 | jq ".Vpcs[].VpcId" -r |wc -l
@@ -7,4 +11,85 @@ aws ec2 describe-vpcs --region us-east-1 | jq ".Vpcs[].VpcId" -r |wc -l
   c)echo ${vpc_count}
   d)echo "${vpc_count}"
 
-  
+$1 can be called as argument or Parameter  which is passed to the script
+REGION=$1
+echo "Lets Get VPC Information for region $REGION..."
+aws ec2 describe-vpcs --region $REGION | jq ".Vpcs[].VpcId" -r
+VPC_COUNT=$(aws ec2 describe-vpcs --region $REGION | jq ".Vpcs[].VpcId" -r | wc -l)
+echo $VPC_COUNT
+echo ${VPC_COUNT}
+echo "${VPC_COUNT}"sa
+echo "$REGION has a total VPC count of ${VPC_COUNT} VPC's"
+echo "$0"
+echo "$1"
+#Execution syntax bash 3.InputRegion.sh <region-name>
+ apt-get update >> /dev/null
+
+--no-pager is a valid option for systemctl (and some other Linux tools like git, journalctl), but it is not supported by AWS CLI
+   a)systemctl status nginx --no-pager
+   b)systemctl status nginx --no-pager >/dev/null #Redirects only stdout (standard output) to /dev/null
+   c)systemctl status nginx --no-pager >/dev/null 2>&1 #To suppress both stdout and stderr
+   | Command                             | Hides Stdout? | Hides Stderr? | Visible Output      |
+   | ----------------------------------- | ------------- | ------------- | ------------------- |     |
+   | `... >/dev/null`                    | ✅           | ❌            | Error still printed |
+   | `... >/dev/null 2>&1`               | ✅           | ✅            | Nothing printed     |
+   d)crontab -l > tmp/jobs.txt 2>/dev/null #Suppresses error messages by redirecting standard error (2) to /dev/null.
+   e)Suppress both stdout and stderr (nothing will be shown): crontab -l > /dev/null 2>&1
+   f)Suppress only stdout, but allow errors to display: crontab -l > /dev/null
+   g)Suppress only errors, but keep stdout: crontab -l 2>/dev/null
+   h)echo "nanna" | tee /tmp/silk    #Redirects and print the output in screen, but o/p will overrirde
+   i)echo "nanna" |tee -a /tmp/silk  #Redirects and print the output in screen, o/p will be appended
+   j)| Usage           | Behavior                               |
+     | --------------- | -------------------------------------- |
+     | `for x in $@`   | Splits on whitespace (not safe)        |
+     | `for x in $*`   | Also splits on whitespace (same issue) |
+     | `for x in "$@"` | Correct — keeps each argument separate |  bash lit.sh us-east-1  "us-east-1 ap-south-1"
+     | `for x in "$*"` | Treats all arguments as one string     |
+   k)bash ty.sh > /dev/null 2>1  #redirects stdout to /dev/null (discard output), 2>1 — redirects stderr to a file named 1 in the current directory (not to stdout).
+
+
+to check even or odd 
+        #!/bin/bash
+        rm -rf /tmp/EVEN.log && rm -rf /tmp/ODD.log
+        for I in {2..30}; do
+            if [ $(expr $I % 2) == 0 ]; then
+                echo "I is $I and its a EVEN number" >>/tmp/EVEN.log
+            else
+                echo  "I is $I and its a ODD number" >>/tmp/ODD.log
+            fi
+        done
+
+        #Script to Find and print EVEN and ODD numbers
+        #!/bin/bash
+        rm -rf /tmp/EVEN.log && rm -rf /tmp/ODD.log
+        for I in {2..30}; do
+            if [ $(($I % 2)) == 0 ]; then
+                echo "I is $I and its a EVEN number" | tee -a /tmp/TEE-EVEN.log
+            else
+                echo  "I is $I and its a ODD number" | tee -a /tmp/TEE-ODD.log
+            fi
+        done
+
+     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
