@@ -58,8 +58,7 @@ to check even or odd
                 echo  "I is $I and its a ODD number" >>/tmp/ODD.log
             fi
         done
-
-        #Script to Find and print EVEN and ODD numbers
+                              OR
         #!/bin/bash
         rm -rf /tmp/EVEN.log && rm -rf /tmp/ODD.log
         for I in {2..30}; do
