@@ -4,6 +4,47 @@ uptime
 last reboot
 To modify nginx page design change in this file  -  /var/www/html/index.nginx-debian.html 
 cat /etc/lsb-release   #To get os type and release date too
+cat /etc/passwd | grep -i HOME     #-i is used to search without case sensitive
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+cat /etc/passwd | grep -i -w ubun  #-w is used to search exact name, even if one letter is not there in the word, we will not get o/p
+No output
+echo "manojKumar" | fold -w1    # To get single letter from a word , we use fold with "w"
+m
+a
+n
+o
+j
+K
+u
+m
+a
+r
+
+echo "manojKumar" | fold -w2 | shuf
+jK
+um
+ma
+no
+ar
+echo "manojKumar" | fold -w2 | shuf | head -1
+ar
+echo "manojKumar" | fold -w2 | shuf | tail -1
+no
+
+
+
+From below cut command is used, when we need to extract a word from a sentence, we use this 
+    echo 'ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash' | cut -d ":" -f1 
+    ubuntu
+    echo 'ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash' | cut -d ":" -f4
+    1000
+    cat /etc/passwd | grep -i -w ubuntu | cut -d ":" -f1 
+    ubuntu
+    cat /etc/passwd | grep -i -w ubunt | cut -d ":" -f1 
+    No answer for above command. 
+
+
+
 
 aws ec2 describe-vpcs --region us-east-1 | jq ".Vpcs[].VpcId" -r |wc -l
   a)vpc_count=$(aws ec2 describe-vpcs --region us-east-1 | jq ".Vpcs[].VpcId" -r |wc -l)
@@ -68,6 +109,19 @@ to check even or odd
                 echo  "I is $I and its a ODD number" | tee -a /tmp/TEE-ODD.log
             fi
         done
+
+To add a user and update the password, when he login. We need to give yes in this below file and next restart ssh
+ nano /etc/ssh/sshd_config.d/60-cloudimg-settings.conf or cat /etc/ssh/sshd_config
+#service ssh restart
+            #!/bin/bash
+            USERNAME=johndoe
+            sudo useradd -m "$USERNAME" --shell /bin/bash
+            SPEC=$(echo '@#%&*_-' | fold -w1 | shuf | head -1)
+            PASSWORD="India@${RANDOM}${SPEC}"
+            echo "$USERNAME:$PASSWORD" | sudo chpasswd
+            sudo passwd -e "$USERNAME"
+            echo "Login with username: $USERNAME"
+            echo "Temporary password: $PASSWORD"
 
      
         
