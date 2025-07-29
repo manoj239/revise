@@ -8,6 +8,10 @@ cat /etc/passwd | grep -i HOME     #-i is used to search without case sensitive
 ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
 cat /etc/passwd | grep -i -w ubun  #-w is used to search exact name, even if one letter is not there in the word, we will not get o/p
 No output
+cat /etc/ssh/sshd_config | grep -n -i passwordauthen #We will get the line numbers beacuse of 'n'
+    66:#PasswordAuthentication yes
+    88:# PasswordAuthentication.  Depending on your PAM configuration,
+    92:# PAM authentication, then enable this but set PasswordAuthentication
 echo "manojKumar" | fold -w1    # To get single letter from a word , we use fold with "w"
 m
 a
@@ -30,8 +34,35 @@ echo "manojKumar" | fold -w2 | shuf | head -1
 ar
 echo "manojKumar" | fold -w2 | shuf | tail -1
 no
+find / -name '*.zip'   #To find the files in root directory that is ending with zip
+find / -name '*.zip' | xargs du 
+find / -name '*.zip' | xargs du -h
+find / -name '*.zip' -size +10M -size -100M # files which are sizes b/w 10 MB and 100MB
+find / -name '*.zip' -size +10M -size -100M | xargs du -ch
+find / -name '*.zip' -size +10M -size -30M | xargs rm -rf #Delete the files which are sizes b/w 10 MB and 30MB
+find $1 -name "*.zip" -size +${20}M -size -${30}M | xargs du -ch
+find /etc -mtime +1        #If today is March 25th, 2025, this command will find files in /etc 
+#that were modified before March 24th, 2025.
+find /etc -mtime -1        #If today is March 25th, 2025, this command will find files in /etc 
+that were modified on or after March 24th, 2025
+cat data | awk -F" " '{print $2}' | tr "-" "."
+echo "Welcome to Devsecops" | tr -d 'e'                  -> Wlcom to Dvscops
+echo "Welcome to Devsecops" | tr '[:lower:]' '[:upper:]' -> WELCOME TO DEVSECOPS
+echo "Welcome to Devsecops" | tr '[:upper:]' '[:lower:]' -> welcome to devsecops
+TR cannot do the following. So sed comes into picture
+    1. It works character by character
+    2. If I want to change a string  in a file at particular loaction , its not possible.
+    3. If want to change a word/string/charc in the whole file it might be not possible
 
-
+sed -i "66 s/.*PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config  
+grep -n -i PasswordAuthentication
+                sed = stream editor                
+                -i = edit file in-place
+                66 = operate on line 66 only
+                s/old/new/ = substitute old with new
+                s/ — begin substitution.
+                .*PasswordAuthentication.* — matches any line containing PasswordAuthentication (with any characters before or after it).
+                PasswordAuthentication yes — this is what the matched line will be replaced with.
 
 From below cut command is used, when we need to extract a word from a sentence, we use this 
     echo 'ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash' | cut -d ":" -f1 
@@ -122,6 +153,19 @@ To add a user and update the password, when he login. We need to give yes in thi
             sudo passwd -e "$USERNAME"
             echo "Login with username: $USERNAME"
             echo "Temporary password: $PASSWORD"
+
+for FILE in $(find / -name awscliv2.zip)
+mkdir /tmp/demo
+do
+echo $FILE
+cp $FILE /tmp/demo
+done
+
+#!/bin/bash
+read -p "Enter the minimum Size : " MIN_SIZE
+read -p "Enter the maximum Size : " MAX_SIZE
+read -p "Enter the path : "  FILE_PATH
+find $FILE_PATH -name "*.zip" -size +${MIN_SIZE}M -size -$(MAX_SIZE)M | xargs du -ch
 
      
         
