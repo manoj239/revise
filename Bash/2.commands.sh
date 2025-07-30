@@ -4,8 +4,17 @@ uptime
 last reboot
 To modify nginx page design change in this file  -  /var/www/html/index.nginx-debian.html 
 cat /etc/lsb-release   #To get os type and release date too
-cat /etc/passwd | grep -i HOME     #-i is used to search without case sensitive
+x=Devsecops
+    a)echo $x      O/p:Devsecops 
+    b)size=${#x}   O/p:9
+    c)echo ${x[@]:0:1}  O/p: D
+    d)echo ${x[@]:2:2}  O/p: VS
+    e)LENGTH=$(( ${#x} - 1))    O/p: 8
+
+cat /etc/passwd | grep -i HOME   or grep -i -w ubuntu /etc/passwd  #-i is used to search without case sensitive
 ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+cat /etc/passwd | grep -E -w 'ubuntu|ubuntu1'   #-E is either ubuntu or ubuntu1 exact word bu using | OR
+cat /tmp/event.log | grep -E -i 'error|denied
 cat /etc/passwd | grep -i ubuntu | cut -d ":" -f1
 ubuntu
 cat /etc/passwd | grep -i ubuntu | cut -d ":" -f1,2,3
