@@ -1,14 +1,26 @@
 git init
 git status
 git add .;git commit -m "Basicscript"
-git remote add origin " "
-git push origin master
-#-> Using single # will give you more size, Using ## will give decrease size 
-git log : We will get commits what we have done till now to the repo with complete detauols like  commit id full number, authour, Date , Commit messages
-git log --oneline : We will get only commit id's of first 7 letters & Commit message
--------------------------------------------------------------
-git branch -m master dev #To rename the master branch to dev
-.gitignore
-git branch
 git remote -v
-Difference b/w git pull & git 
+git remote add origin " "
+git branch
+git push origin master
+git branch -m master dev #To rename the master branch to dev
+git checkout testing    #it will switch to testing branch
+git checkout -b prod    #Automaticaaly creates branch Prod and switches there
+git branch -D prod      #Automatically deletes the branch
+#-> Using single # will give you more size, Using ## will give decrease size 
+
+git log : We will get commits what we have done till now to the repo with complete details like     commit id full number, authour, Date , Commit messages
+
+git log --oneline : We will get only commit id's of first 7 letters & Commit message
+git commit -amend #To update commit message,after giving this command, we meed to pull locaaly the repo, and now a file will open to merge the updated commit with exiting commits in repo. This procees is called as ort startegy
+
+git reset --hard 2dc9b97 #It will delet the commits before 2dc9b97 , only commits from 2dc9b97 will present, remainig will get deleted and next we need to edit the commit, now one file will open  ,we need to update there  and try to push, but we will get error as there is new diff commit id , but here we there is no modification to data, to set this we need to give below command 
+        #git push origin dev --force
+    
+
+
+
+
+

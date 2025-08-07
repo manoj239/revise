@@ -1,3 +1,3 @@
 Merge conflict proceess- When two & or multiple people working on same file , and if they modify it, like 
 when 2 people editing same line, one in remote and anoother in local, first edit will get updated , but 2nd person will get error, so he should again pull locally and update it and then push to repo, this process is called as merge conflict process. We will get popup like what should we accept .
-
+.gitignore
