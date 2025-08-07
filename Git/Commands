@@ -3,5 +3,12 @@ git status
 git add .;git commit -m "Basicscript"
 git remote add origin " "
 git push origin master
+#-> Using single # will give you more size, Using ## will give decrease size 
+git log : We will get commits what we have done till now to the repo with complete detauols like  commit id full number, authour, Date , Commit messages
+git log --oneline : We will get only commit id's of first 7 letters & Commit message
 -------------------------------------------------------------
 git branch -m master dev #To rename the master branch to dev
+.gitignore
+git branch
+git remote -v
+Difference b/w git pull & git 
