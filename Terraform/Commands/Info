@@ -1,0 +1,16 @@
+In Terraform, data sources are used to fetch and reference information from external systems or existing infrastructure that wasn’t created by your current Terraform configuration. They’re incredibly useful when you need to query existing resources or reuse values without recreating them.
+
+A data source allows Terraform to read information from an external provider (like AWS, Azure, etc.) so you can use that data in your configuration.
+For example:
+    a)Get details about an existing VPC
+    b)Fetch AMI IDs
+    c)Retrieve secrets from a vault
+    d)Query DNS records
+
+🧠 Tips
+    a)Data sources are read-only: they don’t create or modify resources.
+    b)You can use them to bridge Terraform with manually created infrastructure.
+    c)Combine them with outputs or locals to make your config more dynamic.
+
+To protect state file, we keep it in S3 bucket. We have an advantage , if keep in s3, as multiple people can use it at a time
+One thing we need to keep in mind that, when 2 or 3 persons applying terraform apply at a time,  there is a chance , that state file be corrupted, in azure, by default we have locking feature, to enable in Aws , we need to give

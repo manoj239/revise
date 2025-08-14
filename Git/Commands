@@ -1,0 +1,242 @@
+git init
+git status
+git add .;git commit -m "Basicscript"
+git remote -v
+git remote add origin " "
+git branch
+git branch -r
+git branch --all or git branch -a
+git clone --branch <branch-name> --single-branch <repo-url>
+git push origin master
+git branch -m master dev #To rename the master branch to dev
+git checkout testing    #it will switch to testing branch
+git checkout -b prod    #Automaticaaly creates branch Prod and switches there
+git branch -D prod      #Automatically deletes the branch
+#-> Using single # will give you more size, Using ## will give decrease size 
+
+git log : We will get commits what we have done till now to the repo with complete details like     commit id full number, authour, Date , Commit messages
+
+git log --oneline : We will get only commit id's of first 7 letters & Commit message
+git commit -amend #To update commit message,after giving this command, we meed to pull locaaly the repo, and now a file will open to merge the updated commit with exiting commits in repo. This procees is called as ort startegy
+
+git reset --hard 2dc9b97 #It will delete the commits before 2dc9b97 , only commits from 2dc9b97 will present, remainig will get deleted and next we need to edit the commit message , now one file will open  ,we need to update the commit message there,  and try to push, but we will get error as there is new diff commit id  , but here in repo we see ,there is no modification to data, to set this we need to give below command 
+        #git push origin dev --force
+git reset --hard HEAD~5 # Very danger command, instead use above command. It will delete all our commits and files will be deleted
+
+For deleting commits, we use git reset, git revert, git iteractive rebase.
+git reset:  Below are the types of git reset . There will be no data loss for mixed and soft
+        - hard  -> Delete commits and also files #Data wwill be lose, if we use this hard and it is very dangerous
+        - soft  -> Delete commits and stages the file
+        - mixed -> Delete commits and files will be in unstaged. #this is default. This is used when we dont want to add the  files , we can delete here 
+
+In interview they will ask us, diffrence b/w soft and mixed , as both are same, as they are used for deleting commits but soft the files will be already staged, but for mixed , we need to give again git add . to stage the files. 
+
+Git stash: When you want to modify any file(for eg .tfvars) in the repo, at the same time without disturbing  this modifications and not ready to commit this changes, if we need to import git repo, use this command. Usally we will get conflicts or data loss. But by using this command, there will be no loss. This is more useful for Devlopers , instead of devops engineers, as developers will always tries to create new branch. once we have done modfications , we need to give below commands, after giivng git stash
+        #git stash
+        #git branch <branchname>
+        #git stash list
+        #git stash apply
+        #git status  #we can see modification of .tfvars file
+        #git restore .tfvars  #Now it will restore to previous stage
+        #git status     #We can see that no modifications are there
+
+Git cherrypick: This is a powerful command that lets you apply a specific commit from one branch onto another. It's like saying, “I want just that one commit over here,” without merging the entire branch.It takes the changes introduced by an existing commit and reapplies them on your current branch. This command we can also call it as hot fix
+In simple way, when you need specific commit from one branch to another branch use this
+Let’s say you’re on main, and you want to apply a commit from feature-branch
+        #git checkout main
+        #git cherry-pick abc1234
+         Where abc1234 is the commit hash from feature-branch
+        If you want multiple commits:
+        #git cherry-pick abc1234..def5678
+If there’s a conflict:
+    Git will pause and ask you to resolve it.
+    After fixing conflicts:
+        #git add .
+        #git cherry-pick --continue
+Hotfix use case:
+        1)A bug was fixed in the dev branch, but production (main) also needs that fix urgently.
+        2)Cherry-pick that commit into main without bringing over all dev changes.
+
+Common Issues
+Conflicts: If the changes clash with your current branch, you’ll need to resolve them manually.
+Duplicate commits: Cherry-picking doesn’t preserve commit hashes, so you may end up with duplicate content if not careful.
+Undo a Cherry-Pick
+If you cherry-picked by mistake:
+        git cherry-pick --abort   # If you're in the middle of resolving conflicts
+        git reset --hard HEAD~1   # If you've already committed and want to undo
+For example create 2 branches, a &b, and now in branch b , create file1b and commit it and push , repeat the same for 4 files. Now switch to branch a. Sow when yougive (git cherrypick <commitidof file1b>), automatically file1b will be created in branch A and we can see commit id of created file ,  to verfiy  give git log --oneline.
+
+git reflog: Suppose if you have deleted a branch and you are expecting to restore the deleted branch and its files, use this. It tracks every movement of your HEAD, even if the branch itself is gone. To test create branch A and create 4 files and again create anothrer new brnach name as branch B and create 4 files. Now dleted the both branches , when you delete the branches , we will get commit id 's . To get commit id's of deleted branch give <git reflog>
+
+For eg commit id for branch A-031bf1d, and for branch B-ef2de13. Now lets start.
+            #git branch   #Intially we will be on master
+            #git checkout ef2de13 #you can see files will be restored
+            #git log --oneline
+            #git checkout -b B #Branch B is recreated
+            #git branch 
+            #git checkout 031bf1d #you can see files will be restored
+            #git log --oneline
+            #git checkout -b A #Branch A is recreated
+            #git branch 
+            #git checkout master
+To create 4 files in  branch , we can create like this also 
+            #git checkout -b A
+            #touch fileA1 fileA2 fileA3 fileA4
+            #git add .
+            #git commit -m "Add files to branch A"
+
+Merge vs Rebase : At high level, both are achieving same thing, taking the changes of  one branch and then mixing or merging with other branch, but they are doing it in different ways, Genrally we will raise PR , to merge, but to do locaaly, we can follow below process
+
+    a)Merge is a non-destructive operation — it combines the histories of two branches without changing existing commits. The branch you merge into will get a new “merge commit,” but the original commit history remains intact.
+    b)In merge there will be no data loss, it wiil  go back and trace what are the commits , which commit was done first. 
+    c)when you merge the commits , they will come in order based on timestamp, even those commits are in different branch. To merge give below command. This merge will happen in ort strategy  by default. After giving below command , a file will open to get commit message, and after writing commit message, a new commit id , will create in tip of branch , apart from the commit id's of both branches
+        #git merge dev (Assming you are on mater branch or any other branch)
+    d)So basically this is one of the drawback in merge, as everytime we merge, automatically, new commit id will get created in the , apart from the existing commits of both branches. When we do 30 merge's , automatically 30 meges will get created, which is not correct. 
+    e)Usage: Merge is more commonly used than rebase because it’s safer — it preserves history exactly as it happened.
+
+Rebase rewrites commit history — it takes the commits from your branch and “replays” them on top of another branch, moving them to the tip as if they were created after the commits in the target branch. This changes commit hashes because the history is rewritten.
+    a)If you see below, after rebase, all the dev commits are put in one side and master 6 to 10 are in   tip of the branch.Lso commit id's of master's 11 to 15 are changed 
+    b)if you do rebase locally, there will be np, but if we push to remote , it will be clumsy, as we  rewrite commit ids. Thats why there is strict rule, never rebase ,branches used by other people or public branch,   always raise pr. 
+    c)Usage: Rebase is great for streamlining complex history into a clean, linear sequence, often used for personal or feature branches.
+
+More info here : https://builtin.com/software-engineering-perspectives/git-rebase-vs-merge
+In single line, merge is safe option, that's good for tracking history on complex projects,as it preserves the entire history of repo, whereas rebase changes from one branch to another, creating linear history. This rebase is used for streamline complex history and individual projects
+
+    #git rebase dev
+    root@ip-10-0-1-6:~/rebase# git log --oneline   (In master branch)
+    495190f (HEAD -> master) MASTER COMMIT 15
+    c6103d2 MASTER COMMIT 14
+    b80a1cf MASTER COMMIT 13
+    ccaed4a MASTER COMMIT 12
+    b74713c MASTER COMMIT 11
+    2f2d50d MASTER COMMIT 5
+    05d6d7b MASTER COMMIT 4
+    6b4bd15 MASTER COMMIT 3
+    e26caf4 MASTER COMMIT 2
+    6dc11d3 MASTER COMMIT 1
+    root@ip-10-0-1-6:~/rebase# git log --oneline  dev
+    73678c9 (dev) DEV COMMIT 15
+    50a45d1 DEV COMMIT 14
+    bc469ed DEV COMMIT 13
+    7ba1c37 DEV COMMIT 12
+    c97356a DEV COMMIT 11
+    0d78b52 DEV COMMIT 5
+    35fc610 DEV COMMIT 4
+    b367737 DEV COMMIT 3
+    3656f9a DEV COMMIT 2
+    e2a9971 DEV COMMIT 1
+    2f2d50d MASTER COMMIT 5
+    05d6d7b MASTER COMMIT 4
+    6b4bd15 MASTER COMMIT 3
+    e26caf4 MASTER COMMIT 2
+    6dc11d3 MASTER COMMIT 1
+    root@ip-10-0-1-6:~/rebase# git rebase dev
+    Successfully rebased and updated refs/heads/master.
+    root@ip-10-0-1-6:~/rebase# git log --oneline
+    f8d5dd3 (HEAD -> master) MASTER COMMIT 15
+    b8856ed MASTER COMMIT 14
+    35b5c38 MASTER COMMIT 13
+    b199237 MASTER COMMIT 12
+    c44bf36 MASTER COMMIT 11
+    73678c9 (dev) DEV COMMIT 15
+    50a45d1 DEV COMMIT 14
+    bc469ed DEV COMMIT 13
+    7ba1c37 DEV COMMIT 12
+    c97356a DEV COMMIT 11
+    0d78b52 DEV COMMIT 5
+    35fc610 DEV COMMIT 4
+    b367737 DEV COMMIT 3
+    3656f9a DEV COMMIT 2
+    e2a9971 DEV COMMIT 1
+    2f2d50d MASTER COMMIT 5
+    05d6d7b MASTER COMMIT 4
+    6b4bd15 MASTER COMMIT 3
+    e26caf4 MASTER COMMIT 2
+    6dc11d3 MASTER COMMIT 1
+
+Git iteractive rebase: When we dont want all the commits in the repo , only one commit is enough, but we dont want to delete the data in it, but we can remove commit history in it, we use this iteractive rebase concept
+So from above if we see, we will get one repo, and later we will give it to customer. So now , basically, customer need only data(files), he doesnt need , what are commits and commit id's. So basically, what we can do is, by using tHis git iteractive rebase, we will make all the commits into one, as customer sees only the code, not the commit history. Data will not get deleted here
+
+    How it works: With interactive rebase (git rebase -i), you can choose to drop specific commits  anywhere in history, not just the last few.
+    Effect: Rewrites history without those commits — creates a new set of commits with different hashes.
+    When to use:
+            When you want to remove commits from the middle of history.
+            When cleaning up a branch before pushing (e.g., deleting “debug” commits).
+                #git rebase -i abc123
+Now we a file will open, based on our requirement, we need to give pick, drop, sqaush, rewrite etc..
+
+💡 Analogy:
+        reset = “Throw away everything after this point.”
+        rebase -i = “Let me edit history and remove just the parts I don’t like.”
+
+I want to delete commits in Git repo now to do it?
+We should ask like, whether we need to delete the Commits Individually or else series of commits?. If we want to delete last to commits, we can we git reset and this git reset has hard, soft and mixed which is default, but if you want to target specific commits which you want to delete git interactive rebase is very good option
+ 
+Git Revert: 
+Purpose: Undo the changes introduced by a specific commit by creating a new commit that reverses those changes.
+How it works:Instead of deleting or rewriting history, git revert adds a new commit on top of your current branch that negates the changes from a previous commit.
+
+Effect on history:History remains intact and unchanged except for the new "revert" commit added.
+
+When to use:When you want to undo a commit in a public/shared branch safely without rewriting history.
+
+Ideal for undoing changes after pushing to a remote repository.
+
+Example:Suppose commit abc123 introduced a bug. To undo it:
+    #git revert abc123
+Git creates a new commit that reverses the changes from abc123, and the data that is created by abc123 will be deleted
+Your branch history now has both the original commit and the revert commit.
+Each git revert creates a new commit that undoes a previous commit without changing history
+
+If we see in Github and Gitlab, max file size, that we can upload is 100mb, if the file is more than 100mb, it will throw error. To upload more than 100mb ,we need to install lfs
+    #git lfs install
+    #curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+    #apt-get install git-lfs -y
+    #git lfs install
+    #git lfs track <filename>
+    #git add .gitattributes
+    #git commit -m "lfs"
+    #git push origin master
+
+Best practice to avoid losing commits
+    a)If you think you might need a branch later, don’t delete it — archive it:
+            #git branch archive/branchA branchA
+#Additonal Info:
+Check how to convert linux server into gitbar repository
+
+What git init Does:
+1. Creates a .git Folder
+•	This hidden folder is added to your project directory.
+•	It contains all the data Git needs to track changes — like commits, branches, logs, etc.
+    2. Turns Your Folder into a Git Repository
+    •	Your project is now a local Git repository.
+    •	You can start using Git commands like git add, git commit, etc.
+    git add .
+    This command stages your changes.
+    •	It tells Git: “I want to include these files in the next commit.”
+    •	The . means “add all changed files in the current directory and subdirectories.”
+    🧠 Think of it like putting items into a shopping cart — you're preparing them for checkout     (commit).
+________________________________________
+🔹 git commit -m "message"
+This command saves your staged changes into the Git history.
+•	It creates a snapshot of your project at that moment.
+•	The -m flag lets you add a message describing what you changed.
+🧠 Think of it like checking out at the store — you’re finalizing the changes you staged.
+
+Commands
+•	Clone → Copy repo to local
+•	Branch → Create a new feature branch
+•	Commit → Save changes
+•	Push → Upload changes to GitHub
+•	Pull Request → Request to merge
+•	Review → Team checks the code
+•	Merge → Finalize into main branch
+
+
+
+    
+
+
+
+
+

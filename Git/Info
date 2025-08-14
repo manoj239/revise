@@ -1,0 +1,120 @@
+Git Essentials Cheat Sheet
+
+### 🔨 Initial Setup
+
+```bash
+git init                     # Initialize a new Git repo
+git status                   # Check current status
+git add .                    # Stage all files
+git commit -m "Basicscript" # Commit with message
+
+### 🌐 Remote Setup
+
+```bash
+git remote -v                        # View remotes
+git remote add origin "<URL>"       # Add remote origin
+git push origin master              # Push to master
+
+### 🌿 Branch Management
+
+```bash
+git branch                          # List branches
+git branch -m master dev            # Rename master to dev
+git checkout testing                # Switch to testing branch
+git checkout -b prod                # Create and switch to prod
+git branch -D prod                  # Delete prod branch
+Tip: `#` comments are larger in size; `##` comments are smaller in size in some markdown renderers.
+
+###  Viewing Commit History
+
+```bash
+git log                             # Full commit details
+git log --oneline                   # Short commit summary
+
+### ✏️ Amending Commits
+
+```bash
+git commit --amend                 # Edit last commit message
+
+> Opens an editor to modify the commit. If you've pulled changes locally, Git may use the **ORT strategy** to merge.
+
+###  Resetting Commits
+
+```bash
+git reset --hard 2dc9b97           # Reset to specific commit (dangerous)
+git push origin dev --force        # Force push after reset
+git reset --hard HEAD~5            # Deletes last 5 commits and files
+
+### 🔄 Types of `git reset`
+
+| Type   | Effect on Commits | Effect on Files        | Data Loss |
+|--------|-------------------|------------------------|-----------|
+| Hard   | Deletes commits   | Deletes files          | Yes       |
+| Soft   | Deletes commits   | Files stay staged      | No        |
+| Mixed  | Deletes commits   | Files unstaged         | No        |
+
+> Interview Tip: Soft vs Mixed — both delete commits, but soft keeps files staged, mixed does not.
+
+### 🧪 Git Stash Workflow
+
+```bash
+git stash                         # Save changes temporarily
+git branch <branchname>           # Create new branch
+git stash list                    # View stashed changes
+git stash apply                   # Reapply stash
+git status                        # See modified files
+git restore .tfvars               # Restore specific file
+
+> Useful for developers working on multiple branches without committing unfinished changes.
+
+### 🔥 Git Cherry-Pick
+
+```bash
+git checkout main
+git cherry-pick abc1234          # Apply specific commit from another branch
+
+### 🧭 Git Reflog Recovery
+
+```bash
+git reflog                       # View HEAD history
+git checkout <commit-id>        # Restore deleted branch state
+git checkout -b <branchname>    # Recreate branch
+```
+> `git reflog` tracks **every HEAD movement**, even if the branch is deleted.
+
+### 📁 Create Multiple Files in a Branch
+
+```bash
+git checkout -b A
+touch fileA1 fileA2 fileA3 fileA4
+git add .
+git commit -m "Add files to branch A"
+
+### ⚔️ Merge Conflict Process
+
+> Happens when **multiple people edit the same file**, especially the same line.
+
+- First person pushes changes.
+- Second person tries to push but gets a **merge conflict error**.
+- Second person must:
+  ```bash
+  git pull origin <branch>       # Pull latest changes
+  # Resolve conflicts manually (Git will show conflict markers)
+  git add .
+  git commit -m "Resolve merge conflict"
+  git push origin <branch>
+Git may show a popup or editor asking which version to accept: **local**, **remote**, or **both**.
+
+### 🚫 `.gitignore`
+> A special file that tells Git which files or directories to **ignore**.
+
+When we give git init, .git hidden folder will be created and in it hooks will be there
+If there is any sensitive data, it should not be commited.
+
+Git hooks:In .git folder, we can see hooks (pre-commmit, etc), it will tell, what should do after commit, after merge etc.
+Developers are having more response time. like they dont want to commit sesitive data to Git by default. Now using this shift left approach, we use githooks anf let us put in precommits.
+**By using this shift left approach, we avoid or stop the errors(like sending sensitive data). Fir that give below command, a hook name(pre-commit) will create
+        #git secrets --install
+
+Before commiting to repo, as a developer or Devops engineer, we should scan at local desktop and remove  the errors, and we need to push 
+Need to see this topic again,
