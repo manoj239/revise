@@ -14,3 +14,15 @@ For example:
 
 To protect state file, we keep it in S3 bucket. We have an advantage , if keep in s3, as multiple people can use it at a time
 One thing we need to keep in mind that, when 2 or 3 persons applying terraform apply at a time,  there is a chance , that state file be corrupted, in azure, by default we have locking feature, to enable in Aws , we need to give
+    #use_lockfile = true
+
+terraform state
+    Subcommands:
+        identities          List the identities of resources in the state
+        list                List resources in the state
+        mv                  Move an item in the state
+        pull                Pull current state and output to stdout
+        push                Update remote state from a local state file
+        replace-provider    Replace provider in the state
+        rm                  Remove instances from the state
+        show                Show a resource in the state

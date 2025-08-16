@@ -2,15 +2,17 @@ terraform individually can't do anything, it uses plugins to build infrstructure
 all the plugins like .terraform etc files will get installed.
 
 terraform init, terraform fmt,validate, plan, apply
-In interview they will ask us, how to edit a state file, we should say, we shouldn't edit the state file directly,
-instead  by using terraform state commands , we can do it. To get the state commands , give <terraform state>
-    terraform state list :We will get the resources list ,what are the resources created by terraform.
-    terraform state rm <resourcename> : When you need to remove specific resource in state file. Removing from state file
-    doesnt mean destroying , just removing from state file. When you give terraform apply & destroy , there will be
+In interview they will ask us, how to edit a state file, we should say, we shouldn't edit
+the state file directly,instead  by using terraform state commands , we can do it. To get
+the state commands , give <terraform state>
+    a)terraform state list :We will get the resources list ,what are the resources created by terraform.
+    b)terraform state rm <resourcename> : When you need to remove specific resource in 
+    state file. Removing the resource from state file   doesnt mean destroying , just 
+    removing from state file. When you give terraform apply & destroy , there will be
     no resources to change
-    terraform state show <resorce name>
-When you want to rename any resource name, that is created by terraform, we should give below comamnds. Before 
-that, we need to edit the names in vs code
+    c)terraform state show <resorce name>
+When you want to rename any resource name, that is created by terraform, we should give
+below comamnds. Before that, we need to edit the names in vs code
     a)terraform state list
       aws_security_group.allow_all                                                                                                                                                                 aws_subnet.subnet1-public                                                                           aws_subnet.subnet2-public 
       aws_subnet.subnet3-public
@@ -19,18 +21,63 @@ that, we need to edit the names in vs code
     b)terraform state mv random_password.password_5 random_password.password_54 
     c)terraform apply #if we see, there will be no changes 
 
-When you want to delete particular resource, terraform destroy will not work as it will delete all resources, but
-if you need to delete particular resource give
+When you want to delete particular resource, terraform destroy will not work as it will
+delete all resources, but if you need to delete particular resource give
     #terraform destroy -target random_password.password_5
             OR
     #for each ($i in 1..5)
     {
         terraform destroy -target random_password.password_$i --auto-approve
     }
-When you want to rotate the password give like below. Taint is used to rotate the password
+When you want to rotate the password give like below. Taint is used to rotate the password.
+Whenever if we tainted any resource, it will get destroy and automatically new resource
+ will create, when we give terraform apply.
     #terraform taint random_password.password_$i
             OR
     #for each ($i in 1..5)
     {
         terraform taint random_password.password_$i
     }
+*So basically , in above we if we give terraform apply, first resources will get deleted and 
+later , new resource will get replaced, but sometimes in production, first resources should
+re-placed, next destroy should happen. To do so, we use lifecycle hooks/arguments. Give like below
+        lifecycle {
+            create_before_destroy = true
+        }
+If tags on this resource are changed outside of Terraform, don’t try to overwrite them
+       lifecycle {
+            ignore_changes = [ tags ]
+        }
+
+What ignore_changes = [tags] does
+Terraform normally keeps your AWS resources exactly like your .tf files say. If something 
+changes outside of Terraform (like in the AWS console), Terraform will try to "fix" it 
+back. After giving above command, terraform says:
+"I won't complain if tags change outside Terraform, I’ll leave them alone."
+Terraform won’t care if:
+    Someone adds new tags in AWS
+    Someone removes or changes tags in AWS
+    It will keep its hands off.
+When NOT to use it: If you want Terraform to be the single source of truth and enforce exact tags
+
+    lifecycle {
+            prevent_destroy = true
+     }
+If someone runs terraform destroy or changes the config in a way that would replace 
+this resource, don’t do it. Throw an error instead." This will help us, when we dont want to 
+delete unexpectly
+
+When you manually create s3 bucket, and if you need to bring to terraformform manegemnt, 
+give below comamnd. Terraform plan is used to  see if Terraform’s state matches AWS. 
+    #terraform import <RESOURCE_TYPE>.<RESOURCE_NAME> <IDENTIFIER>
+        #terraform import aws_s3_bucket.aws58repl awsb58repl
+        #terraform plan
+        #teeraform state show aws_s3_bucket.aws58repl awsb58repl
+After you run terraform import:
+Terraform updates the state file (terraform.tfstate) to map
+   "aws_s3_bucket.aws58repl" → "awsb58repl" in AWS.
+
+This mapping tells Terraform: “When I manage aws_s3_bucket.aws58repl, I’m talking about the real AWS bucket awsb58repl.”
+RESOURCE_NAME is used to save the name in state file. If you changed the RESOURCE_NAME 
+in your .tf file later, Terraform would think it’s a different resource unless you also 
+rename it in the state file with terraform state mv.
