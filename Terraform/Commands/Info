@@ -26,3 +26,17 @@ terraform state
         replace-provider    Replace provider in the state
         rm                  Remove instances from the state
         show                Show a resource in the state
+
+Count keyword is used to iterate the code as the index starts from 0
+Element keyword is used to take 2 parameters at a time
+We cant use count for Ingress and egress  in security group, so that we have can use toset or distinct comamnd based on our requirement. 
+    a)When you want to remove the duplicates and maintain the order, we use distinct   (used in subnets), 
+    b)if just removing the  duplicates, maintaining order is  not required, then we    use tosed(used in security groups)
+Summary in your words (corrected):
+    count → iterate resource blocks (index starts at 0).
+    element → pick a value from a list using index.
+    distinct → remove duplicates, keep order (best for subnets).
+    toset → remove duplicates, order doesn’t matter (best for SG rules).
+
+Dynamic Blocks in security groups?:
+Normal ingress/egress blocks can’t directly use loops.Dynamic lets you programmatically generate multiple rules based on a variable.Makes the code scalable and DRY (Don’t Repeat Yourself).

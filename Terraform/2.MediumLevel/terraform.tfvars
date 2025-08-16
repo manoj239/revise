@@ -1,0 +1,15 @@
+aws_region   = "ap-south-1"
+vpc_name     = "AwsDevops43"
+vpc_cidr     = "10.1.0.0/16"
+subnet1_cidr = "10.1.1.0/24"
+subnet2_cidr = "10.1.2.0/24"
+az1          = "ap-south-1a"
+az2          = "ap-south-1b"
+key_name     = "Remote"
+environment  = "dev"
+imagename = {
+  "ap-south-1" = "ami-0b09627181c8d5778"
+}
+owner         = "DynoRamp"
+instance_type = "t2.micro"
+appversion    = "1.0.0"

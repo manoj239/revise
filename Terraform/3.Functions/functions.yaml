@@ -1,0 +1,20 @@
+Terraform Functions:
+    Creating index with Count
+    element(list, count.index)
+    length
+    dynamic blocking with for-each using security group
+    locals
+    upper
+    lower
+    toset & distinct
+    lookup with map - lookup(map, key, default)
+    condition - condition(condition, true_val, false_val)
+    Override tfvars with -var "key=value"
+    datasources with alias provider in ohio region
+    Creating secrets and s3 in ohio region with alias provider.
+
+provisioners with terraform_data/null_resource:
+      file
+      remote-exec
+      local-exec
+      

@@ -1,0 +1,13 @@
+variable "aws_region" {}
+variable "vpc_name" {}
+variable "vpc_cidr" {}
+variable "subnet1_cidr" {}
+variable "subnet2_cidr" {}
+variable "az1" {}
+variable "az2" {}
+variable "imagename" {}
+variable "instance_type" {}
+variable "environment" {}
+variable "owner" {}
+variable "key_name" {}
+variable "appversion" {}
