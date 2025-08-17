@@ -13,6 +13,7 @@ resource "aws_route_table" "terraform-private" {
   vpc_id = aws_vpc.default.id
   tags = {
     Name = "${var.vpc_name}-private-route-table"
+    Version = var.appversion
   }
 }
 

@@ -40,3 +40,8 @@ Summary in your words (corrected):
 
 Dynamic Blocks in security groups?:
 Normal ingress/egress blocks can’t directly use loops.Dynamic lets you programmatically generate multiple rules based on a variable.Makes the code scalable and DRY (Don’t Repeat Yourself).
+
+Terraform’s null_resource doesn’t actually create any cloud resource by itself.
+It’s used when you just want to run provisioners (like scripts, commands) on machines you already created (here, your aws_instance.public-servers), we use this.
+Terraform provisioners are independent blocks.Each provisioner needs to know how to connect to the remote machine, so you must define a connection for each of them.
+Instead of repeating, you can define one connection block at the resource level, and it will apply to all provisioners inside:

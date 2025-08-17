@@ -22,17 +22,17 @@ resource "random_password" "passwords" {
   }
 }
 
-resource "aws_secretsmanager_secret" "rds-secrrets" {
+resource "aws_secretsmanager_secret" "rds-secdreets" {
   provider = aws.ohio
   count    = 3
-  name     = "rds-secrrets-${count.index}"
+  name     = "rds-secdreets-${count.index}"
 }
 
 # Creating a AWS secret versions for database master account (Masteraccountdb)
 resource "aws_secretsmanager_secret_version" "sversion" {
   provider      = aws.ohio
   count         = 3
-  secret_id     = element(aws_secretsmanager_secret.rds-secrrets[*].id, count.index)
+  secret_id     = element(aws_secretsmanager_secret.rds-secdreets[*].id, count.index)
   secret_string = <<EOF
    {
    "username": "adminaccount",

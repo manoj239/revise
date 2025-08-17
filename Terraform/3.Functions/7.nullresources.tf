@@ -33,4 +33,5 @@ resource "null_resource" "cluster" {
   triggers = {
     public-servers-tags = element(aws_instance.public-servers.*.tags.Version, count.index)
   }
+  depends_on = [aws_instance.public-servers]
 }

@@ -32,4 +32,4 @@ imagename = {
 }
 owner         = "DynoRamp"
 instance_type = "t3.micro"
-appversion    = "1.0.0"
+appversion    = "1.0.0.2"
