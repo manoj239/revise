@@ -45,3 +45,44 @@ Terraform’s null_resource doesn’t actually create any cloud resource by itse
 It’s used when you just want to run provisioners (like scripts, commands) on machines you already created (here, your aws_instance.public-servers), we use this.
 Terraform provisioners are independent blocks.Each provisioner needs to know how to connect to the remote machine, so you must define a connection for each of them.
 Instead of repeating, you can define one connection block at the resource level, and it will apply to all provisioners inside:
+Important Notes on Provisioners
+1)Not recommended for production unless absolutely necessary.
+2)Terraform prefers infrastructure as code — provisioners can break reproducibility. Use tools like cloud-init, Ansible or user\_data for better long-term automation.
+When Should You Use Provisioners?:Use them only when:
+1)You can't achieve the setup using standard resource definitions.
+ 2)You need to do something very specific on the instance *right after* creation.
+
+When we are creating one resource in different region, apart from different regions, definitely we should provide the region and alias 
+
+When and Why to Use alias in Provider Blocks: If you are creating AWS resources in multiple regions, then:
+        You must define multiple provider blocks (one for each region).
+    	You must assign a unique alias to each provider block (except the default).
+    	You then reference the correct provider using provider = aws.<alias> inside each resource.
+Important Notes:
+•	Aliased providers are required any time you use more than one provider configuration of the same type (e.g., multiple AWS regions).
+•	Terraform doesn't guess the region from the resource, it only knows based on the provider.
+
+
+Terraform Modules: When you are selective to deploy the files, in particular account, or particular customer, then we use this. Here we keep seprate modules like for IAM one ,odule, vpc one module, s3 one module etc.,A module is just a container for Terraform resources. it is a reusable package of Terraform code. The root module is the folder where you run terraform init and terraform apply. You can create child modules and call them from the root or from other modules.
+Why use Modules?
+    a)Reusability → Write once, use in multiple environments (dev, qa, prod).
+    b)Organization → Break large Terraform projects into smaller logical units.
+    c)Maintainability → Easier to update and manage.
+    d)Consistency → Standardize infrastructure across teams.
+A typical module folder contains:
+    main.tf → Resources (core logic)
+    variables.tf → Input variables
+    outputs.tf → Output values
+    provider.tf (optional) → Provider configuration
+    versions.tf (optional) → Terraform & provider versions
+source → tells Terraform where to find the module.
+Terraform Module supports different sources:
+    1)Local path → ./modules/vpc
+    2)Git repo → git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git
+    3)Terraform Registry →
+            module "vpc" {
+              source  = "terraform-aws-modules/vpc/aws"
+              version = "5.0.0"
+            }
+    4)S3 bucket / GCS bucket → for internal module sharing.
+*By using , outputs.tf, we will pass the values from one module to another module
