@@ -86,3 +86,14 @@ Terraform Module supports different sources:
             }
     4)S3 bucket / GCS bucket → for internal module sharing.
 *By using , outputs.tf, we will pass the values from one module to another module
+
+In real projects, we often need separate environments (e.g., dev, qa, prod) or even separate customer accounts.Each environment/account should have its own state file, otherwise resources may clash Workspaces help manage this by keeping isolated state files for each environment, while still using the same Terraform code.
+                    #terraform workspace
+                    Usage: terraform [global options] workspace
+
+                        Subcommands:
+                            delete    Delete a workspace
+                            list      List Workspaces
+                            new       Create a new workspace
+                            select    Select a workspace
+                            show      Show the name of the current workspace

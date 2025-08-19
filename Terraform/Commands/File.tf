@@ -82,9 +82,44 @@ give below comamnd. Terraform plan is used to  see if Terraform’s state matche
 After you run terraform import:
 Terraform updates the state file (terraform.tfstate) to map
    "aws_s3_bucket.aws58repl" → "awsb58repl" in AWS.
-
 This mapping tells Terraform: “When I manage aws_s3_bucket.aws58repl, I’m talking about the 
 real AWS bucket awsb58repl.”
 RESOURCE_NAME is used to save the name in state file. If you changed the RESOURCE_NAME 
 in your .tf file later, Terraform would think it’s a different resource unless you also 
 rename it in the state file with terraform state mv.
+
+Terraform Workspaces: If we want to create similar infra code to a customer containing different accounts
+like prod,deqa, etc, then we should want to have separate stae file for each accounts,so now by using this
+workspaces, we can create seprate state files for each account.  After giving terraform init command, we need 
+give below command
+    #terraform workspace list
+    #terraform workspace new alpha  #creates a new workspace ,name as alpha
+By default, Terraform has a default workspace. When you create a new workspace, Terraform stores its state
+in a separate folder inside your remote backend (e.g., S3 bucket).Now once we give above command, go 
+and check in s3 bucket, as we can see env folder, and in it, we can see alpha folder, and in it contains
+state file.
+        #terraform plan --var-file .\Alpha.tfvars
+Instead of duplicating .tf files for each environment, you can reuse the same code  with different 
+.tfvars files.
+*So what does terraform workspaces do?- While creating multiple envi, there should want to be seperate 
+state file for each envi/account,but if there are 10 envi, and we create 10tfvars, it will not correct, 
+as even there is small change, we should need to update in 10tfvars, which is not correct. Instead of this ,
+for same code, we can put different tfvars and the same time, if we are following this, we need to keep seperate
+state files for each account/customer, so workspaces, helps to achieve this. This is the main usage of worspaces, 
+as it create seperate state files for each account. So now create another workspace for 2nd account
+            #terraform workspace new bravo #state file get create in env/bravo folder in s3
+            #terraform apply --var-file.\Bravo.tfvars
+            #terraform workspace select alpha   # Switch to an existing alpha workspace
+            #terraform workspace select bravo   # Switch to an existisng bravo workspace
+            #terraform workspace list  ## Show available workspaces
+🔹 Advantages of Workspaces
+        ✅ Keeps separate state files for each environment/account.
+        ✅ Allows you to reuse the same Terraform code with different tfvars.
+        ✅ Easy to switch between environments (terraform workspace select).
+
+⚠️ Limitations / Gotchas
+        Workspaces are great for small sets of environments (dev, qa, prod).
+        But if you have many accounts or complex infra, using separate backends (one per account) or terragrunt is often a better practice.
+        Still, for quick setups and customer-specific infra, workspaces are very handy.
+👉 So, the main usage of workspaces:“To isolate Terraform state files for multiple environments/accounts 
+while reusing the same infrastructure code.”
