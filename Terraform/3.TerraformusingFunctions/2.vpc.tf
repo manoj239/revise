@@ -11,6 +11,6 @@ resource "aws_vpc" "default" {
 resource "aws_internet_gateway" "default" {
   vpc_id = aws_vpc.default.id #Implicit dependency on vpc id
   tags = {
-    Name = "${var.vpc_name}-IGW"
+    Name = "${var.vpc_name}-IGWS"
   }
 }
